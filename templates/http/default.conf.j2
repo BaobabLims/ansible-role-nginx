@@ -55,9 +55,11 @@ auth_request_set {{ item.value.auth_request_set_http.name }} {{ item.value.auth_
 {% endif %}
 
 server {
+{% if item.value.listen is defined and item.value.listen %}
 {% for listen in item.value.listen %}
     listen {% if item.value.listen[listen].ip is defined and item.value.listen[listen].ip | length %}{{ item.value.listen[listen].ip }}:{% endif %}{{ item.value.listen[listen].port }}{% if item.value.ssl is defined and item.value.ssl %} ssl{% endif %}{% if item.value.listen[listen].opts is defined and item.value.listen[listen].opts | length %} {{ item.value.listen[listen].opts | join(" ") }}{% endif %};
 {% endfor %}
+{% endif %}
     server_name {{ item.value.server_name | default('localhost') }};
 {% if item.value.ssl is defined and item.value.ssl %}
     ssl_certificate {{ item.value.ssl.cert }};
